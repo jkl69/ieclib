@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="IECServer" default="hello" basedir="."> 
+
+	<property name="src.dir" location="src" />
+	<property name="build.dir" location="lib" />
+	<property name="docs.dir" location="doc" />
+	<property name="dist.dir" value="Dist" />
+  
+   <target name="hello">
+    <echo>"Hello"</echo>
+    <echo>${git_branch}</echo>
+	</target>
+	
+</project>
+	

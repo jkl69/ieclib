@@ -10,9 +10,9 @@ import jkl.iec.tc.type.IECMap.IECType;
 public class IECComboBox extends JComboBox<String> {
 	public IECComboBox() {
 		for (IECType it : IECType.values()) {
-//			if (IECMap.IEC_M_Type.contains(it)) {
+			if (it != IECType.IEC_NULL_TYPE) {
 				addItem(IECMap.getTypeDescription(it));
-//			}
+			}
 		}
 	}
 	

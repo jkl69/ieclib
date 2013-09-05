@@ -34,7 +34,7 @@ import java.awt.FlowLayout;
 @SuppressWarnings("serial")
 public class Server extends JFrame {
 	
-	private String version = "V0.1";
+	private String version = "V1.0.0";
 	private final static Logger log = Logger.getLogger(Server.class .getName()); 
 	
 	public static IECTable iectable;
