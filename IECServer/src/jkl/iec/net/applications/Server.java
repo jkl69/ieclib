@@ -27,10 +27,14 @@ import jkl.iec.net.sockets.IECServer;
 import jkl.iec.tc.gui.IECTabedTable;
 import jkl.iec.tc.gui.IECTable;
 import jkl.iec.tc.gui.IECTableModel;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
 
 @SuppressWarnings("serial")
 public class Server extends JFrame {
 	
+	private String version = "V0.1";
 	private final static Logger log = Logger.getLogger(Server.class .getName()); 
 	
 	public static IECTable iectable;
@@ -107,6 +111,7 @@ public class Server extends JFrame {
 		}
 	}
 
+
 public Server()  {
 	
 	IECServer.log.addHandler(new IECServerTraceHandler(textField));
@@ -121,7 +126,7 @@ public Server()  {
 	log.fine("IEC Server start");	
 
 	setIconImage(Toolkit.getDefaultToolkit().getImage(Server.class.getResource("/iec/net/applications/Images/IEC.PNG")));
-	setTitle("IEC-TestServer");
+	setTitle(version+"  IEC-TestServer");
 	log.config("setTitle");	
 	
 	ServerAction =new serveraction();
@@ -155,11 +160,12 @@ public Server()  {
 	JTabbedPane tabbPane = new JTabbedPane(JTabbedPane.TOP);
 	tabbPane.addTab("Trace", null, scrollPane, null);
 			
-	if (usettable) {
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,iecttable,tabbPane);
-	} else {
+	// Add Table to Split Panel 
+//	if (usettable) {
+//		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,iecttable,tabbPane);
+//	} else {
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,iectable,tabbPane);
-	}
+//	}
 	
 //    tabbPane.setBackground(Color.DARK_GRAY);
 	tabbPane.addTab("Clients", null,Clientpanel, null);
@@ -175,7 +181,16 @@ public Server()  {
 //	BP = new ButtonPanel(ServerAction,tf.data);
 	BP = new ButtonPanel(ServerAction,IECdata);
 	getContentPane().add( BP,BorderLayout.NORTH);
-//					getContentPane().add( tf );
+	
+	JPanel Statuspanel = new JPanel();
+	FlowLayout flowLayout = (FlowLayout) Statuspanel.getLayout();
+	flowLayout.setAlignment(FlowLayout.LEFT);
+	getContentPane().add(Statuspanel, BorderLayout.SOUTH);
+	
+	JLabel Statustext = new JLabel(version +" by jkl");
+	Statustext.setFont(new Font("Tahoma", Font.PLAIN, 10));
+	Statuspanel.add(Statustext);
+	
 	
 	}
 

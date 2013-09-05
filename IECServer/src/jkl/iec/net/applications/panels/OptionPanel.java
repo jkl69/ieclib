@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
+import java.awt.FlowLayout;
 
 @SuppressWarnings("serial")
 public class OptionPanel extends JPanel {
@@ -47,6 +48,7 @@ public class OptionPanel extends JPanel {
 	private final JPanel panel = new JPanel();
 	private final JButton btnLoadSimFile = new JButton("LoadSimFile");
 	private final JButton btnNewButton = new JButton("t");
+//	private final JPanel panel_1 = new JPanel();
 	
 	public void setList(IECList ieclist){
 		this.ieclist=ieclist;
@@ -62,6 +64,7 @@ public class OptionPanel extends JPanel {
 		Respone_Unknown.addActionListener(oa);
 		Respone_Unknown.setSelected(true);
 		add(Respone_Unknown);
+		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		
 		add(panel);
 		btnLoadSimFile.addActionListener(new ActionListener() {
@@ -85,6 +88,8 @@ public class OptionPanel extends JPanel {
 		panel.add(btnPlaySim);
 		
 		panel.add(btnNewButton);
+		
+//		add(panel_1);
 		btnPlaySim.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				IECSimPlayer player = new IECSimPlayer();
