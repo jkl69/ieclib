@@ -1,0 +1,11 @@
+
+item=/9/1/8193;value=+10;break=1000
+#hgrthzrthz
+item=/13/100/65537;value=3;break=2000
+item=/13/100/65537;value=-43;QU=128;break=2000
+item=/13/100/65537;value=213;break=2000
+item=/13/100/65537;value=73;break=2000
+#rtzrtzre
+item=/9/1/8193;value=+5;QU=128;break=3000
+item=/9/1/8193;value=-5;QU=0;break=500
+
