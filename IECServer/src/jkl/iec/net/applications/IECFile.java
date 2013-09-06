@@ -5,11 +5,14 @@ import jkl.iec.tc.type.IECList;
 import jkl.iec.tc.type.IECMap;
 import jkl.iec.tc.type.IECTCItem;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -23,6 +26,26 @@ public class IECFile {
 	private String PropFile;
 	JFileChooser fc = new JFileChooser();
 	BufferedWriter bw ;
+	
+	public static File URLFileCopier(URL url, String filePath) throws Exception {
+		byte[] buffer = new byte[1024];
+		int bytesRead;
+		 
+		BufferedInputStream inputStream = null;
+		BufferedOutputStream outputStream = null;
+		URLConnection connection = url.openConnection();
+	    inputStream = new BufferedInputStream(connection.getInputStream());
+	    File f = new File(filePath);
+	    outputStream = new BufferedOutputStream(new FileOutputStream(f));
+	    while ((bytesRead = inputStream.read(buffer)) != -1) {
+		      outputStream.write(buffer, 0, bytesRead);
+		    }
+	    inputStream.close();
+	    outputStream.close();
+	    System.out.println("URL:File "+url+" copyed to Local:File "+ f);	
+	    return f;
+		}
+	
 	
 	public IECFile(IECTableModel t) {
 		this.tf =t;

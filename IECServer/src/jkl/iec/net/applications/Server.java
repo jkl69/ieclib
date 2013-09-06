@@ -30,12 +30,21 @@ import jkl.iec.tc.gui.IECTableModel;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.URL;
 
 @SuppressWarnings("serial")
 public class Server extends JFrame {
 	
-	private String version = "V1.0.0";
 	private final static Logger log = Logger.getLogger(Server.class .getName()); 
+	
+	private static String VersionFile = "/iec/net/applications/Images/version.ser"; 
+	
+	private Properties VERSION;
 	
 	public static IECTable iectable;
 	static IECTabedTable iecttable;
@@ -111,7 +120,38 @@ public class Server extends JFrame {
 		}
 	}
 
-
+	private Properties getVersionProperties(){
+		Properties result= new Properties();
+	    URL url = Server.class.getResource(VersionFile); 
+//	    URL url2 =Server.class.getResource("/iec/net/applications/Images/IEC.PNG"); 
+		log.info("URL_V.Info "+url);	
+//		log.info("URL_V2.Info "+url2);	
+		if (url != null) {
+			File f=null;
+			try {
+				f= IECFile.URLFileCopier(url,"version.ser");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			InputStream fis = null;
+			try
+				{
+		    	  fis = new FileInputStream( f );
+			      ObjectInputStream o = new ObjectInputStream( fis );
+				  result =(Properties) o.readObject();
+				}
+				catch ( IOException e ) { System.err.println( e ); }
+				catch ( ClassNotFoundException e ) { System.err.println( e ); }
+				finally { try { fis.close(); }
+							catch ( Exception e ) { } }		
+	    		
+			f.delete();
+			log.info("Props from ser.File "+ result);
+		}
+		return result;
+		
+	}
+	
 public Server()  {
 	
 	IECServer.log.addHandler(new IECServerTraceHandler(textField));
@@ -125,8 +165,9 @@ public Server()  {
 
 	log.fine("IEC Server start");	
 
+	VERSION = getVersionProperties();
 	setIconImage(Toolkit.getDefaultToolkit().getImage(Server.class.getResource("/iec/net/applications/Images/IEC.PNG")));
-	setTitle(version+"  IEC-TestServer");
+	setTitle("  IEC-TestServer");
 	log.config("setTitle");	
 	
 	ServerAction =new serveraction();
@@ -187,7 +228,7 @@ public Server()  {
 	flowLayout.setAlignment(FlowLayout.LEFT);
 	getContentPane().add(Statuspanel, BorderLayout.SOUTH);
 	
-	JLabel Statustext = new JLabel(version +" by jkl");
+	JLabel Statustext = new JLabel("V"+VERSION.getProperty("Version","??")+" by jkl");
 	Statustext.setFont(new Font("Tahoma", Font.PLAIN, 10));
 	Statuspanel.add(Statustext);
 	

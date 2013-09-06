@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="IECServer" default="hello" basedir="."> 
+<project name="IECServer" default="run" basedir="."> 
 
 	<property name="src.dir" location="src" />
-	<property name="build.dir" location="lib" />
+	<property name="build.dir" location="bin" />
 	<property name="docs.dir" location="doc" />
 	<property name="dist.dir" value="Dist" />
-  
-   <target name="hello">
-    <echo>"Hello"</echo>
-    <echo>${git_branch}</echo>
+
+	
+ <!-- master test -->
+	<target name="master">
+	   <echo>"Hello"</echo>
+	   <echo>${git_branch}</echo>
+	</target>
+	
+<!-- Creates an .jar file -->
+ 	<target name="jar" >
+    	<jar destfile="${dist.dir}/${ant.project.name}.jar"  >
+    	    <fileset dir="${build.dir}/"
+    	    />
+    	    <fileset dir="../IEC.net/bin/"
+    	    />
+            <manifest>
+                <attribute name="Main-Class" value="jkl.iec.net.applications.Server"/>
+                <attribute name="Build" value="${build.time} b-${build.number}"/>
+            </manifest>
+    	</jar> 
+ 	   <echo>${basedir}</echo>
+    </target>
+	
+<!-- run the .jar file -->
+   <target name="run" depends="jar">
+      <java jar="${dist.dir}/${ant.project.name}.jar" fork="true"/>
 	</target>
 	
 </project>
