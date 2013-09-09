@@ -23,6 +23,7 @@ import jkl.iec.event.impl.IECEventListener;
 import jkl.iec.net.applications.panels.ButtonPanel;
 import jkl.iec.net.applications.panels.ClientPanel;
 import jkl.iec.net.applications.panels.OptionPanel;
+import jkl.iec.net.applications.panels.PorpertiesTable;
 import jkl.iec.net.sockets.IECServer;
 import jkl.iec.tc.gui.IECTabedTable;
 import jkl.iec.tc.gui.IECTable;
@@ -124,7 +125,7 @@ public class Server extends JFrame {
 		Properties result= new Properties();
 	    URL url = Server.class.getResource(VersionFile); 
 //	    URL url2 =Server.class.getResource("/iec/net/applications/Images/IEC.PNG"); 
-		log.info("URL_V.Info "+url);	
+		log.fine("URL_V.Info "+url);	
 //		log.info("URL_V2.Info "+url2);	
 		if (url != null) {
 			File f=null;
@@ -146,7 +147,7 @@ public class Server extends JFrame {
 							catch ( Exception e ) { } }		
 	    		
 			f.delete();
-			log.info("Props from ser.File "+ result);
+//			log.info("Props from ser.File "+ result);
 		}
 		return result;
 		
@@ -215,6 +216,10 @@ public Server()  {
 	tabbPane.addTab("Options", null, oPanel, null);
 	oPanel.setList(IECdata.ieclist);
 	
+//	 OptionPanel aPanel = new OptionPanel();
+	 PorpertiesTable aPanel = new PorpertiesTable(VERSION);
+	tabbPane.addTab("About", null, aPanel, null);
+
 	getContentPane().add(splitPane, BorderLayout.CENTER);
 	splitPane.setOneTouchExpandable(true);
 	splitPane.setDividerLocation(200);

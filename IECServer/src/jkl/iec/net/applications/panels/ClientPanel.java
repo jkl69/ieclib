@@ -117,7 +117,8 @@ public class ClientPanel extends JScrollPane implements ActionListener {
 			     		 while (logger.getLevel()==null) {
 			     			 logger= logger.getParent();
 			     		 }
-						 if (Server.server == null) {
+						 if (!Server.iecstatus()) {
+//					     if (Server.server == null) {
 							ex.setText("START");
 					    } else {
 							ex.setText("STOP");
