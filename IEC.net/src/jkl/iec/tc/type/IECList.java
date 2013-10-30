@@ -76,6 +76,10 @@ public class IECList extends ArrayList<IECTCItem> {
 	    
 	 private Timer timer = new Timer();
 	 
+	 public void stop(){
+		 timer.cancel();
+	 }
+	 
 	 public IECList() {
 		 log.finest("");
 		 name="IECList_"+String.valueOf(counter++);
@@ -104,7 +108,6 @@ public class IECList extends ArrayList<IECTCItem> {
 	  */
 	 public boolean add() {
 		 IECTCItem item =new IECTCItem();
-		 item.Name = "Item"+size();
 		 if (iectype!= null) {
 			 item.setType(iectype);
 		 }
@@ -120,7 +123,9 @@ public class IECList extends ArrayList<IECTCItem> {
 	 }
 	 
      public boolean	add(IECTCItem o) {
- 	    boolean result=super.add(o);
+		o.Name = "Item"+size();
+//		o.setName_fx(new SimpleStringProperty("Item"+size()));
+		boolean result=super.add(o);
  	    if (SimEnabled) {
  	    	iecsimulator.add(o);
  	    	o.data = new IECSimProperties(o);
@@ -337,8 +342,7 @@ public class IECList extends ArrayList<IECTCItem> {
 	}
 
 	public static String[] getPropNames() {
- 		 String[] result = new String[IECTCItem.getPropNames().length +
- 		                              IECSimProperties.getPropNames().length];
+ 		 String[] result = new String[IECTCItem.getPropNames().length + IECSimProperties.getPropNames().length];
  		 System.arraycopy(IECTCItem.getPropNames(),0,result,0,IECTCItem.getPropNames().length);
  		if (SimEnabled) {
  			System.arraycopy(IECSimProperties.getPropNames(),0,result,IECTCItem.getPropNames().length,IECSimProperties.getPropNames().length);

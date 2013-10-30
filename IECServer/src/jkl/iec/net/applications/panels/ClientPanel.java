@@ -202,13 +202,13 @@ public class ClientPanel extends JScrollPane implements ActionListener {
 		 }
     	 if (e.getActionCommand().equals("CONFIG")) {
     		IECSocketDlg dlg = null;
-			log.fine("dlg");
+			log.fine("dlg row="+row);
 			if (row == 0) {
 				dlg = new IECSocketDlg(IECServer.iecSocketParameter);
+				log.fine("dlg row="+row);
 				dlg.titledborder.setTitle("Default");
-
 			}
-			if (iecsock!=null) {
+			if ((row>0)&&(iecsock!=null)) {
 				dlg = new IECSocketDlg(iecsock.iecSocketParameter);
 			}
 			if (dlg!=null) {

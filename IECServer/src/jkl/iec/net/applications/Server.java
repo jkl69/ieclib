@@ -150,7 +150,6 @@ public class Server extends JFrame {
 //			log.info("Props from ser.File "+ result);
 		}
 		return result;
-		
 	}
 	
 public Server()  {

@@ -87,7 +87,7 @@ public class OptionPanel extends JPanel {
 		JButton btnPlaySim = new JButton("Start Simulation");
 		panel.add(btnPlaySim);
 		
-		panel.add(btnNewButton);
+//		panel.add(btnNewButton);
 		
 //		add(panel_1);
 		btnPlaySim.addActionListener(new ActionListener() {
