@@ -1,6 +1,8 @@
 package jkl.iec.tc.type;
 
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -183,10 +185,13 @@ public class IECTCObject implements Cloneable {
 			break;
 		}
 		case M_ME_NC: case M_ME_TF : {
-			result =buf[index] +
-					buf[index+1]<<8+
-					buf[index+2]<<16+
-					buf[index+3]<<24 ;
+			byte[] tmp = new byte[4];
+			tmp[0] = buf[index];
+			tmp[1] = buf[index + 1];
+			tmp[2] = buf[index + 2];
+			tmp[3] = buf[index + 3];
+			result = ByteBuffer.wrap(tmp).order(ByteOrder.LITTLE_ENDIAN)
+					.getFloat();
 			break;
 		}
 		case M_IT_NA: case M_IT_TB : {
