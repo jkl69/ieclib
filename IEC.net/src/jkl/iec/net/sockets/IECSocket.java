@@ -79,7 +79,7 @@ public class IECSocket extends Thread {
 
 	      if (iecSocketParameter.iecSocketType == IECSocketType.IECClient) {
 	         if (iecstatus == IECSocketStatus.IECSocketINIT) {
-	        	 send_Stop();	        	 
+	        	 send_Start();	        	 
 	          }
     	      if (iecSocketParameter.t3 < new Date().getTime()) {
 			      log.finer("(t3) exp. send polling");
