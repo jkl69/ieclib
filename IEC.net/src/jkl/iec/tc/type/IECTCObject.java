@@ -484,19 +484,27 @@ public class IECTCObject implements Cloneable {
 	private void writeTime(int TimeIndex) {
 //		System.out.println("IOB TIMEIDX. "+ TimeIndex);
 		Calendar d = Calendar.getInstance();
-		d.setTime(Time);
-		buf[TimeIndex]= (byte) (d.get(Calendar.MILLISECOND)%256);
-		buf[TimeIndex+1]= (byte) (d.get(Calendar.MILLISECOND)/256);
-		buf[TimeIndex+2]= (byte) (d.get(Calendar.MINUTE));
-		buf[TimeIndex+3]= (byte) (d.get(Calendar.HOUR_OF_DAY));
+		Date date = new Date();
+		d.setTime(date);
+		System.out.println("WRITE TIME:" + getStrTimeStamp(date));
+		int ms = d.get(Calendar.MILLISECOND) + 1000 * d.get(Calendar.SECOND);
+		buf[TimeIndex]= (byte) (ms & 0xFF);
+		buf[TimeIndex+1]= (byte) ((ms & 0xFF00) >> 8);
+		buf[TimeIndex+2]= (byte) (d.get(Calendar.MINUTE) & 0x00FF); // valid flag
+		buf[TimeIndex+3]= (byte) (d.get(Calendar.HOUR_OF_DAY) & 0x00FF);
 		if (TimeZone.getDefault().inDaylightTime(d.getTime())) {
 			buf[TimeIndex+3]=(byte) (buf[TimeIndex+3]+0x80) ;
 		}
-		buf[TimeIndex+4]= (byte) (d.get(Calendar.DAY_OF_MONTH));
-		buf[TimeIndex+5]= (byte) (d.get(Calendar.MONTH)+1);
+		// iec101, 7.2.6.18 monday = 1
+		int day = 7;
+		if (d.get(Calendar.DAY_OF_WEEK) > 1) {
+			day = d.get(Calendar.DAY_OF_WEEK) -1;
+		}
+		buf[TimeIndex+4]= (byte) ((day & 0x03) << 5 | (d.get(Calendar.DAY_OF_MONTH) & 0x1F));
+		buf[TimeIndex+5]= (byte) ((d.get(Calendar.MONTH)+1) & 0x0F);
 		buf[TimeIndex+6]= (byte) (d.get(Calendar.YEAR)-2000);
 	}
-	
+
 	public Date readTime() {
 		int TimeIndex=getTimeIndex();
 		return readTime(TimeIndex);
@@ -507,15 +515,17 @@ public class IECTCObject implements Cloneable {
 		String txt =" Sytem TIME ";
 		if (isTimeType()) {
 			txt = " IOB TIME ";
-			d.set(Calendar.MILLISECOND,((buf[index+1] & 0xFF) << 8) | (buf[index] & 0xFF));
-			d.set(Calendar.MINUTE,(buf[index+2] & 0xFF));
-			d.set(Calendar.HOUR_OF_DAY,(buf[index+3] & 0x7F));
-			d.set(Calendar.DAY_OF_MONTH,(buf[index+4] & 0xFF));
-			d.set(Calendar.MONTH,(buf[index+5] & 0xFF)-1);
-			d.set(Calendar.YEAR,(buf[index+6] & 0xFF)+2000);
+			d.set(Calendar.SECOND, 0);
+			d.set(Calendar.MILLISECOND,(buf[index+1] & 0xFF) << 8  | (buf[index] & 0xFF));
+			d.set(Calendar.MINUTE,(buf[index+2] & 0x3F));
+			d.set(Calendar.HOUR_OF_DAY,(buf[index+3] & 0x1F));
+			d.set(Calendar.DAY_OF_MONTH,(buf[index+4] & 0x1F));
+			d.set(Calendar.MONTH,(buf[index+5] & 0x0F)-1);
+			d.set(Calendar.YEAR,(buf[index+6] & 0x7F)+2000);
+			log.finer(txt+ d.getTime());
+			return d.getTime();
 		} 
-		log.finer(txt+ d.getTime());
-		return d.getTime();
+		return null;
 	}
 	
 	private double getDef_MAX() {
