@@ -1,5 +1,9 @@
 package jkl.iec.net.applications;
 
+/*
+02.03.14 jkl
+  Version 1.0.2-28: Item MIn-MAX Values added to file  
+*/
 
 import java.awt.BorderLayout;
 
@@ -41,7 +45,7 @@ import java.net.URL;
 @SuppressWarnings("serial")
 public class Server extends JFrame {
 	
-	private final static Logger log = Logger.getLogger(Server.class .getName()); 
+	public final static Logger log = Logger.getLogger(Server.class .getName()); 
 	
 	private static String VersionFile = "/iec/net/applications/Images/version.ser"; 
 	
@@ -235,7 +239,6 @@ public Server()  {
 	JLabel Statustext = new JLabel("V"+VERSION.getProperty("Version","??")+" by jkl");
 	Statustext.setFont(new Font("Tahoma", Font.PLAIN, 10));
 	Statuspanel.add(Statustext);
-	
 	
 	}
 

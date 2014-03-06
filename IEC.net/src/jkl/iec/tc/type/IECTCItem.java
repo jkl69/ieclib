@@ -372,6 +372,8 @@ public class IECTCItem {
 			setCOT(Integer.parseInt(p.getProperty(pre+"COT",String.valueOf(getCOT()))));
 			iob(0).setIOB(Integer.parseInt(p.getProperty(pre+"IOB",String.valueOf(iob(0).getIOB()))));
 			iob(0).setValue(Double.parseDouble(p.getProperty(pre+"VALUE",String.valueOf(iob(0).getValue()))));
+			iob(0).setMIN_VALUE(Double.parseDouble(p.getProperty(pre+"MIN",String.valueOf(iob(0).getMIN_VALUE()))));
+			iob(0).setMAX_VALUE(Double.parseDouble(p.getProperty(pre+"MAX",String.valueOf(iob(0).getMAX_VALUE()))));
 			flag1 = Boolean.parseBoolean(p.getProperty(pre+"SIMULATE",String.valueOf(flag1)));
 		} catch (Exception e) {
 		}
@@ -384,14 +386,16 @@ public class IECTCItem {
 	}
 
 	public static String[] getPropNames() {
-		  String[] result =new String[7];
+		  String[] result =new String[9];
 		  result[0] ="NAME";
 		  result[1] ="TYPE";
 		  result[2] ="ASDU";
 		  result[3] ="COT";
 		  result[4] ="IOB";
 		  result[5] ="VALUE";
-		  result[6] ="SIMULATE";
+		  result[6] ="MIN";
+		  result[7] ="MAX";
+		  result[8] ="SIMULATE";
 		  return result;
 	  }
 	  
@@ -407,6 +411,8 @@ public class IECTCItem {
 		p.setProperty(pre+"COT",String.valueOf(getCOT()));
 		p.setProperty(pre+"IOB",String.valueOf(iob(0).getIOB()));
 		p.setProperty(pre+"VALUE",String.valueOf(iob(0).getValue()));
+		p.setProperty(pre+"MIN",String.valueOf(iob(0).getMIN_VALUE()));
+		p.setProperty(pre+"MAX",String.valueOf(iob(0).getMAX_VALUE()));
 		p.setProperty(pre+"SIMULATE",String.valueOf(flag1));
 		if (data.getClass()== IECSimProperties.class) {
    				IECSimProperties sim = (IECSimProperties) data;
@@ -424,6 +430,8 @@ public class IECTCItem {
 		s=s+String.valueOf(getCOT())+";";
 		s=s+String.valueOf(iob(0).getIOB())+";";
 		s=s+String.valueOf(iob(0).getValue())+";";
+		s=s+String.valueOf(iob(0).getMIN_VALUE())+";";
+		s=s+String.valueOf(iob(0).getMAX_VALUE())+";";
 		s=s+String.valueOf(flag1);
 		if (data.getClass()== IECSimProperties.class) {
    				IECSimProperties sim = (IECSimProperties) data;

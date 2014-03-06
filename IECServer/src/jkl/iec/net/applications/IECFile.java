@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
@@ -18,14 +19,16 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class IECFile {
-	
+
 	IECTableModel tf;
 	private String PropFile;
 	JFileChooser fc = new JFileChooser();
 	BufferedWriter bw ;
+	FileNameExtensionFilter frar;
 	
 	public static File URLFileCopier(URL url, String filePath) throws Exception {
 		byte[] buffer = new byte[1024];
@@ -49,9 +52,13 @@ public class IECFile {
 	
 	public IECFile(IECTableModel t) {
 		this.tf =t;
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Properties", 
-	            "properties", "prop");   
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Properties", "properties", "prop");   
+		frar = new FileNameExtensionFilter("IDS-rar","rar", "rar");   
 		fc.addChoosableFileFilter(filter);
+		fc.addChoosableFileFilter(frar);
+    	fc.setAcceptAllFileFilterUsed(false);
+		fc.setFileFilter(filter);
+
 	}
 	
 
@@ -137,7 +144,7 @@ public class IECFile {
 
 	int c= Integer.parseInt(p.getProperty("ITEMS.COUNT","0"));
 	List<String> propertyList = Arrays.asList(p.getProperty("ITEM.PROPERTIES").split(";")); 
-	System.out.println("ITEM PROBETIES IN FILE "+propertyList);
+	System.out.println("ITEM PROPETIES IN FILE "+propertyList);
 	for (int it=1;it<=c;it++) {
 		String pre = "ITEM"+it;
 		String[] ss= p.getProperty(pre).split(";");
@@ -187,11 +194,48 @@ public class IECFile {
 	tf.fireTableDataChanged();
 	return true;
 	}
-
+    
+	public boolean load(Properties p){
+		double version =1.0;
+		loadV2(p);
+		version=2.0;
+    	tf.ieclist.setItemProperties(p,version);
+	    tf.fireTableDataChanged();
+	    return true;
+	}
+	
 	public boolean load() {
+		Convbase cb =new Convbase();
+//		cb.readFile(cb.fids[0]);
+		cb.delFiles();
+		
 		if (fc.showOpenDialog(null)==JFileChooser.APPROVE_OPTION) {
+			if (fc.getFileFilter() == frar) {
+				return loadrar();
+			}
 			return load(fc.getSelectedFile().toString());
 		}
 		return false;
-		} 
+		}
+
+
+	private boolean loadrar() {
+		Convbase cb =new Convbase();
+		cb.delFiles();
+//		String Path;
+// 		Path =fc.getCurrentDirectory().getAbsolutePath(); 
+//		System.out.println(Path+" DIR:"+fc.getCurrentDirectory());
+		System.out.println("fileselect:"+fc.getSelectedFile().toString());
+		
+		cb.unrar(fc.getSelectedFile().toString());
+
+		Properties fp;
+		for (int x=0;x < cb.fids.length;x++) {
+			fp= cb.readFile(cb.fids[x]);
+    		fp.list(System.out);
+	    	load(fp);
+		}
+		cb.delFiles();		
+		return false;
+    	} 
 	}
