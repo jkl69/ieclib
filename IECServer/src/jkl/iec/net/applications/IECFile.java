@@ -29,6 +29,7 @@ public class IECFile {
 	JFileChooser fc = new JFileChooser();
 	BufferedWriter bw ;
 	FileNameExtensionFilter frar;
+	FileNameExtensionFilter fcsv;
 	
 	public static File URLFileCopier(URL url, String filePath) throws Exception {
 		byte[] buffer = new byte[1024];
@@ -54,11 +55,12 @@ public class IECFile {
 		this.tf =t;
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Properties", "properties", "prop");   
 		frar = new FileNameExtensionFilter("IDS-rar","rar", "rar");   
+		fcsv = new FileNameExtensionFilter("IDS-csv","csv", "csv");   
 		fc.addChoosableFileFilter(filter);
-		fc.addChoosableFileFilter(frar);
+//		fc.addChoosableFileFilter(frar);
+		fc.addChoosableFileFilter(fcsv);
     	fc.setAcceptAllFileFilterUsed(false);
 		fc.setFileFilter(filter);
-
 	}
 	
 
@@ -207,15 +209,12 @@ public class IECFile {
 	public boolean load() {
 		Convbase cb =new Convbase();
 //		cb.readFile(cb.fids[0]);
-		cb.delFiles();
-		
+//		cb.delFiles();
 		if (fc.showOpenDialog(null)==JFileChooser.APPROVE_OPTION) {
-			if (fc.getFileFilter() == frar) {
-				return loadrar();
-			}
-			return load(fc.getSelectedFile().toString());
-		}
-		return false;
+			if (fc.getFileFilter() == frar) { return loadrar();  }
+			if (fc.getFileFilter() == fcsv) { return loadcsv();	}
+    	}
+		return load(fc.getSelectedFile().toString());
 		}
 
 
@@ -225,7 +224,7 @@ public class IECFile {
 //		String Path;
 // 		Path =fc.getCurrentDirectory().getAbsolutePath(); 
 //		System.out.println(Path+" DIR:"+fc.getCurrentDirectory());
-		System.out.println("fileselect:"+fc.getSelectedFile().toString());
+		System.out.println("LoadRAR fileselect:"+fc.getSelectedFile().toString());
 		
 		cb.unrar(fc.getSelectedFile().toString());
 
@@ -236,6 +235,20 @@ public class IECFile {
 	    	load(fp);
 		}
 		cb.delFiles();		
+		return false;
+    	} 
+
+	private boolean loadcsv() {
+		Convbase cb =new Convbase();
+		System.out.println("LoadCSV fileselect:"+fc.getSelectedFile().toString());
+//		cb.unrar(fc.getSelectedFile().toString());
+		Properties fp;
+//		for (int x=0;x < cb.fids.length;x++) {
+			fp= cb.readFile(fc.getSelectedFile().toString());
+    		fp.list(System.out);
+	    	load(fp);
+//		}
+//		cb.delFiles();		
 		return false;
     	} 
 	}
