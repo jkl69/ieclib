@@ -200,6 +200,16 @@ public class IECTCObject implements Cloneable {
 			result = buf[index] + buf[4]*256;
 			break;
 		}
+		case C_SE_NC : {
+			int bits = 0;
+			bits = buf[index] +
+				   buf[index+1]*256+
+				   buf[index+2]*65535+
+				   (buf[index+3] & (0xef))*16777216 ;
+			log.fine("*BITS:"+bits);
+			result = Float.intBitsToFloat(bits);
+			break;
+		}
 		case C_IC_NA : {
 			result = buf[index];
 			break;
@@ -210,6 +220,7 @@ public class IECTCObject implements Cloneable {
 		}
     	}
 		log.finer("buf["+index+"]["+Integer.toHexString(buf[index])+"..]  Value := "+result);
+		System.out.println(result);
 		Value = result;
 	}
 	 
@@ -333,6 +344,7 @@ public class IECTCObject implements Cloneable {
 		}
 		case M_ME_NC: case M_ME_TF : {
 			int value=Float.floatToRawIntBits((float) Value);
+			log.severe("*BITS:"+value);
 			buf[index+3] =(byte) ((value & 0xff000000)>>24);
 			buf[index+2] =(byte) ((value & 0x00ff0000)>>16);
 			buf[index+1] =(byte) ((value & 0x0000ff00)>>8);
@@ -485,8 +497,11 @@ public class IECTCObject implements Cloneable {
 //		System.out.println("IOB TIMEIDX. "+ TimeIndex);
 		Calendar d = Calendar.getInstance();
 		d.setTime(Time);
-		buf[TimeIndex]= (byte) (d.get(Calendar.MILLISECOND)%256);
-		buf[TimeIndex+1]= (byte) (d.get(Calendar.MILLISECOND)/256);
+		int msec = d.get(Calendar.SECOND)*1000 + d.get(Calendar.MILLISECOND);
+//		buf[TimeIndex]= (byte) (d.get(Calendar.MILLISECOND)%256);
+//		buf[TimeIndex+1]= (byte) (d.get(Calendar.MILLISECOND)/256);
+		buf[TimeIndex]= (byte) (msec %256);
+		buf[TimeIndex+1]= (byte) (msec /256);
 		buf[TimeIndex+2]= (byte) (d.get(Calendar.MINUTE));
 		buf[TimeIndex+3]= (byte) (d.get(Calendar.HOUR_OF_DAY));
 		if (TimeZone.getDefault().inDaylightTime(d.getTime())) {

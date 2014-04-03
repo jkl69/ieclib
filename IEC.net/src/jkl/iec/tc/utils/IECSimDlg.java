@@ -27,14 +27,16 @@ import jkl.iec.tc.type.IECTCItem;
 public class IECSimDlg extends JDialog {
 
     ActionListener rbListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-    		if (! isfielderror()) {
+        public void actionPerformed(ActionEvent e) {   //close dialog by ESC or ENTER
+        	if (! isfielderror()) {
     			System.out.println("Sim fields OK -> save");
         		if (IECMap.IEC_M_Type.contains(item.getType())) {
         			simworker.setTimerString(timeField.getText(),true);
         			simworker.setValinc(valinc);
         		}
         		if (IECMap.IEC_C_Type.contains(item.getType())) {
+//                	if (simworker.isBackFile) {
+//                    	}
         			simworker.setBackString(itemField.getText(),true);
         			simworker.setValinc(valinc);
         		}
@@ -47,6 +49,7 @@ public class IECSimDlg extends JDialog {
 	
     boolean isfielderror() {
     	boolean fielderror = false;
+    	if (itemField.getText().startsWith("@")) return fielderror;
 		if (timeField.getBackground()== Color.YELLOW) fielderror =true; 
 		if (ValueField.getBackground()== Color.YELLOW) fielderror =true; 
 		if (itemField.getBackground()== Color.YELLOW) fielderror =true; 
@@ -118,6 +121,9 @@ public class IECSimDlg extends JDialog {
 				warn();
 			}
 			private void warn() {
+				if (itemvalueField.getText().startsWith("@")) {
+					return;
+				}
 				if (simworker.isBackString(itemField.getText())) {
 					itemField.setBackground(Color.WHITE);					
 					itemErorrLabel.setText("");	
@@ -143,6 +149,8 @@ public class IECSimDlg extends JDialog {
 				warn();
 			}
 			private void warn() {
+				itemvalueField.setBackground(Color.WHITE);					
+				itemvalueErorrLabel.setText("");	
 				try {
 					valinc = Double.parseDouble(itemvalueField.getText());
 					itemvalueField.setBackground(Color.WHITE);					

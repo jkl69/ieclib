@@ -1,6 +1,11 @@
 package jkl.iec.tc.utils;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
@@ -64,25 +69,71 @@ public class IECSimulator extends ArrayList<IECTCItem>{
       }
    	    
     private void sim_C_Item(IECTCItem item) {
-//   		    	System.out.println("time"+item.iob(0).getTime()+"  time_RX"+item.iob(0).Time_RX);	
+//    	System.out.println("**** C_SIM ****");
+    			//"time"+item.iob(0).getTime()+"  time_RX"+item.iob(0).Time_RX);	
+   	   	String backfile;
    	   	if (item.iob(0).getTime() != item.iob(0).Time_RX) {   //
-   	    	String tr = "Simul  reaction trigger "+item.Name+" Search item Type:"+simprop.backType+"  asdu:"+simprop.backASDU+" IOB:"+simprop.backIOB;
-   	    	IECTCItem simitem =ieclist.getIECStream(simprop.backType,simprop.backASDU,simprop.backIOB);
-   	    	if (simitem != null) {
-   		    	tr = tr+" --> OK";
-   	    		if (simprop.getValinc()==0) {
-   	    			simitem.iob(0).setValue(item.iob(0).getValue());	
-   	    		} 
-   	    		if ((simprop.getValinc()!=0)& (!simitem.iob(0).setValue(simitem.iob(0).getValue()+simprop.getValinc()))) {
-   	    			simprop.setValinc(-1 * simprop.getValinc());
-   			    	simitem.iob(0).setValue(simitem.iob(0).getValue()+simprop.getValinc());
-   			    	}
-   			    }
-   			    System.out.println(tr);
-   			    item.iob(0).Time_RX = item.iob(0).getTime();
-   	    	}
-   	    }
+   	    	if (simprop.isBackFile) {
+				backfile =simprop.getBackString();
+				IECSimPlayer player = new IECSimPlayer();
+				player.setIeclist(ieclist);
+				if (! player.play(backfile.substring(1, backfile.length()))) {
+//					"D:\\workspace\\IEC.net\\src\\iec\\tc\\utils\\sim.txt")) {
+			    	System.out.println("MAIN_Player INIT ERROR !");
+			    }
+			    item.iob(0).Time_RX = item.iob(0).getTime();
 
+/*
+					FileReader fileReader = null;
+				}
+				try {
+					backfile =simprop.getBackString();
+					String bf = backfile.substring(1, backfile.length());
+//					System.out.println("backfile:"+backfile.substring(1, backfile.length()));
+					System.out.println("backfile:"+bf);
+					fileReader = new FileReader(new File(bf));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				    item.iob(0).Time_RX = item.iob(0).getTime();
+					return;
+				}
+    	    	 BufferedReader br = new BufferedReader(fileReader);
+    	    	 String line = null;
+    	    	 try {
+					while ((line = br.readLine()) != null) {
+    			    	System.out.println("**** C_SIM ****"+line);
+    			    	simprop.setBackString(line,true);
+    		   	    	sim_C_item_checkback(item);
+	        	    }
+				} catch (IOException e) {
+					e.printStackTrace();
+				    item.iob(0).Time_RX = item.iob(0).getTime();
+					return;
+				}
+    	     simprop.setBackString(backfile,false);
+*/
+    	    } 
+   	    	else   	sim_C_item_checkback(item);
+   	  	}
+   	}
+
+    private void sim_C_item_checkback(IECTCItem item) {
+	    	IECTCItem simitem =ieclist.getIECStream(simprop.backType,simprop.backASDU,simprop.backIOB);
+   	    	String tr = "Simul  reaction trigger "+item.Name+" Search item Type:"+simprop.backType+"  asdu:"+simprop.backASDU+" IOB:"+simprop.backIOB;
+	    	if (simitem != null) {
+	   	    	tr += " --> FOUND";
+	    		if (simprop.getValinc()==0) {
+	    			simitem.iob(0).setValue(item.iob(0).getValue());	
+	    		} 
+	    		if ((simprop.getValinc()!=0)& (!simitem.iob(0).setValue(simitem.iob(0).getValue()+simprop.getValinc()))) {
+	    			simprop.setValinc(-1 * simprop.getValinc());
+			    	simitem.iob(0).setValue(simitem.iob(0).getValue()+simprop.getValinc());
+			    	}
+			    }
+			    System.out.println(tr);
+			    item.iob(0).Time_RX = item.iob(0).getTime();
+    }
+    
     @SuppressWarnings("deprecation")
 	private void calcNextSimTime() {
     	Date now =new Date();

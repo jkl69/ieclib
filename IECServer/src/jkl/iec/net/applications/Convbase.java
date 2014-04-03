@@ -43,7 +43,8 @@ public class Convbase {
 	    }
 	}
 	
-    String HEADER ="ITEM.PROPERTIES=NAME;TYPE;ASDU;COT;IOB;MIN;MAX";
+//    String HEADER ="ITEM.PROPERTIES=NAME;TYPE;ASDU;COT;IOB;MIN;MAX";
+    String HEADER ="ITEM.PROPERTIES=NAME;TYPE;ASDU;IOB;MIN;MAX";
 	int ItemCount,LineNo =0;
 
 	private String getFooter() {
@@ -147,7 +148,8 @@ public class Convbase {
 		iecprop.type = getType(entrys);
 		iecprop.ASDU = getAsdu(entrys);
 		iecprop.IOB = getIob(entrys);
-		iecprop.Min = getMin(entrys);
+//		 System.out.println("IOB:"+iecprop.IOB);
+	    iecprop.Min = getMin(entrys);
 		iecprop.Max = getMax(entrys);
 		return iecprop;
 	}
@@ -205,23 +207,19 @@ public class Convbase {
     	ItemCount =0;
        try {
 //   		System.out.println(HEADER);
-   		p.setProperty("ITEM.PROPERTIES","NAME;TYPE;ASDU;COT;IOB;MIN;MAX");
+//      		p.setProperty("ITEM.PROPERTIES","NAME;TYPE;ASDU;COT;IOB;MIN;MAX");
+       		p.setProperty("ITEM.PROPERTIES","NAME;TYPE;ASDU;IOB;MIN;MAX");
 		while((line = br.readLine()) != null) {
-//			System.out.println(line);
-//			System.out.println("*****************************");
 			parseLine(line);
 		    LineNo ++;
 		    }
    		p.setProperty("ITEMS.COUNT",String.valueOf(ItemCount));
-//		System.out.println(getFooter());
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
       try {
 		fis.close();
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
       return p; 

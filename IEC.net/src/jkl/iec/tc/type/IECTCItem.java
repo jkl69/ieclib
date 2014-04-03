@@ -148,11 +148,20 @@ public class IECTCItem {
 		 }
 		 IECTCObject o = iob(0);
 		 int l =  o.getBufLength();
-		 if (length == l * getIOBCount() *+index) {
-			 log.log(Level.FINE,"Stream Length:{2} (Head.length[{0}] + IOB.count[{3}]*IOB.length[{1}])",new Object[]{index,l,l+index,getIOBCount()});
+		 if (length == l + (getIOBCount() *index)) {
+			 log.log(Level.FINE,"Stream Length:{2} (Head.length[{0}] + IOB.count[{3}]*IOB.length[{1}])",new Object[]{
+					 index,
+					 l,
+					 l+index,
+					 getIOBCount()});
 			 return true;
 		 } 
-		 log.log(Level.SEVERE,"Stream Length:{3} should {2} (Head.length[{0}] + IOB.count[{4}]*IOB.length[{1}])",new Object[]{index,l,l * getIOBCount()+index,length,getIOBCount()});
+		 log.log(Level.SEVERE,"Stream Length:{3} should {2} (Head.length[{0}] + IOB.count[{4}]*IOB.length[{1}])",new Object[]{
+				 index,
+				 l,
+				 l * getIOBCount()+index,
+				 length,
+				 getIOBCount()});
 		 return false;
 	}
 

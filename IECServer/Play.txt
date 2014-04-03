@@ -1,0 +1,7 @@
+item=/9/1/4097;value=1
+item=/9/9/8193;inc=5;sleep=5000
+item=/9/9/8193;inc=5
+item=/9/9/8193;value=5
+item=/9/10/8193;inc=7;sleep=3000
+item=/9/10/8193;inc=7;sleep=3000;QU=128
+item=/9/10/8193;value=7

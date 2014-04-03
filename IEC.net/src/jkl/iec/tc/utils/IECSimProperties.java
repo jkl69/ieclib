@@ -12,6 +12,7 @@ public class IECSimProperties  {
   public long NextSimTime;
   private String TimeString="";
   private String BackString="";
+  boolean isBackFile=false;
   int TimeInc;
   int TimeInc2=-1;
   public String SimStr;
@@ -110,12 +111,23 @@ public class IECSimProperties  {
   public boolean isBackString(String txt) {
 	  return setBackString(txt,false);
   }
+  
+  private boolean setBackFile(String txt) {
+	 System.out.println("setBackFile");
+	 isBackFile = true;
+     BackString = txt;
+	 return true;
+  }
+  
   public boolean setBackString(String txt,boolean write) {
 //		String[] s =txt.split("\\\\");
+	    System.out.println("setBackString "+txt);
 		int tmpasdu;
 		int tmpiob;
 		IECType tmptype;
-		
+		if (txt.startsWith("@")) {return setBackFile(txt);}
+
+		isBackFile = false;
 		lastErrorStr ="unknown";
 		txt =txt.replaceAll(" ","");
 		if (txt.isEmpty()) {
@@ -127,7 +139,6 @@ public class IECSimProperties  {
 			return false;
 		}
 		String[] s =txt.split("/");
-//		System.out.println("Elements "+s.length);
 		if (s.length>3) {
 			try {
 				if (s[1].equals("")) {

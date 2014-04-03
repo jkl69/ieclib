@@ -31,6 +31,7 @@ public class IECSimPlayer {
 		private IECType iectype = null;
 		private int qu = 0;
 		private Float Value = null;
+		private Float inc = null;
 		
 		public void run() {
 			System.out.println("Player Create ");
@@ -66,13 +67,14 @@ public class IECSimPlayer {
 			String[] keyval;
 			String Stream = null;
 			
-			newTime =2000;
+			newTime =1000;
 			
 			ASDU = 0;
 			IOB = 0;
 			iectype = null;
 			qu = 0;
 			Value = (float) 0;
+			inc = (float) 0;
 			
 //			System.out.println("LINE_"+lineNo+ ": "+txt);
 			if (txt == null) {
@@ -90,11 +92,15 @@ public class IECSimPlayer {
 //				System.out.println("LINE_parms "+param.length);
 				for(int i =0; i < param.length ; i++){
 					keyval = param[i].split("=");
-				    if (keyval[0].equals("break")) {
+//					System.out.println("parm:"+keyval[0]);
+				    if (keyval[0].equals("sleep")) {
 				    	newTime =Integer.parseInt(keyval[1]);
 				    }
 				    if (keyval[0].equals("value")) {
 				    	Value =Float.parseFloat(keyval[1]);
+				    }
+				    if (keyval[0].equals("inc")) {
+				    	inc =Float.parseFloat(keyval[1]);
 				    }
 				    if (keyval[0].equals("QU")) {
 				    	qu =Integer.parseInt(keyval[1]);
@@ -123,12 +129,16 @@ public class IECSimPlayer {
 //					System.out.println("LINE_"+lineNo+ ": "+txt);
 				}
 				if (PlayFileEnd == false) {
-					System.out.println("Player: Type "+iectype+" ASDU "+ASDU+" IOB "+IOB+ "  Val "+Value+"  QU "+qu+" Player SLEEP("+newTime+")"); 	
+					System.out.println("Player: Type "+iectype+" ASDU "+ASDU+" IOB "+IOB+"  inc "+inc+"  Val "+Value+"  QU "+qu+" Player SLEEP("+newTime+")"); 	
 					if (ieclist !=null) {
 						item = ieclist.getIECStream(iectype, ASDU, IOB);
 						if (item !=null) {
 //							System.out.println("Type in LIST --> SIMULATE");
-							item.iob(0).setValue(item.iob(0).getValue()+Value);
+							if (inc != 0) {
+								item.iob(0).setValue(item.iob(0).getValue()+inc);
+							} else {
+								item.iob(0).setValue(Value);
+							}
 							item.iob(0).setQU((byte) qu);
 //							item.iob(0).s
 						}
