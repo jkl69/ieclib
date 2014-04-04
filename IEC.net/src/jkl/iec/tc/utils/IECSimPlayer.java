@@ -18,14 +18,14 @@ public class IECSimPlayer {
 	private Timer timer = null;
 	private BufferedReader br;
 	private FileReader fr ;
-	
+	private String itemname = "";	
 	private IECList ieclist =null; 
+	int lineNo=0;
 	
 	class player extends TimerTask {
 //		Properties p;
 		private int newTime =2000; 
 		private Boolean PlayFileEnd = false;
-		
 		private int ASDU = 0;
 		private int IOB = 0;
 		private IECType iectype = null;
@@ -62,80 +62,95 @@ public class IECSimPlayer {
 //		
 // only created items will be Simulated
 		
-		private boolean isValidLine(String txt) {
-			String[] param;
-			String[] keyval;
-			String Stream = null;
+  private boolean isValidLine(String txt) {
+	String[] param;
+	String[] keyval;
+	String Stream = null;
+	
+	newTime =1000;
+	ASDU = 0;
+	IOB = 0;
+	iectype = null;
+	qu = 0;
+	Value = (float) 0;
+	inc = (float) 0;
 			
-			newTime =1000;
-			
-			ASDU = 0;
-			IOB = 0;
-			iectype = null;
-			qu = 0;
-			Value = (float) 0;
-			inc = (float) 0;
-			
-//			System.out.println("LINE_"+lineNo+ ": "+txt);
-			if (txt == null) {
-/**				try {
-					br.reset();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-**/
-				PlayFileEnd = true;
-			}
-				
-			if(txt != null) {
-				param =txt.split(";");
-//				System.out.println("LINE_parms "+param.length);
-				for(int i =0; i < param.length ; i++){
-					keyval = param[i].split("=");
-//					System.out.println("parm:"+keyval[0]);
-				    if (keyval[0].equals("sleep")) {
-				    	newTime =Integer.parseInt(keyval[1]);
-				    }
-				    if (keyval[0].equals("value")) {
-				    	Value =Float.parseFloat(keyval[1]);
-				    }
-				    if (keyval[0].equals("inc")) {
-				    	inc =Float.parseFloat(keyval[1]);
-				    }
-				    if (keyval[0].equals("QU")) {
-				    	qu =Integer.parseInt(keyval[1]);
-				    }
-				    if (keyval[0].equals("item")) {
-				    	Stream = keyval[1];
-				    	keyval = Stream.split("/");
-				    	iectype = IECMap.getType((Byte.parseByte(keyval[1])));
-				    	ASDU = Integer.parseInt(keyval[2]);
-				    	IOB = Integer.parseInt(keyval[3]);
-				    }
-				}
-//			System.out.println("Validate : Type "+iectype+" ASDU "+ASDU+" IOB "+IOB+ "  Val "+Value+"  QU "+qu+" Player SLEEP("+newTime+")"); 	
-			return ((iectype != null)&&(ASDU != 0)&&(IOB !=0));
-			}
-		return false;	
+//	System.out.println("ValidateLine_"+txt);
+	if (txt == null) {
+		System.out.println("PLAYFile EOF:");
+    	PlayFileEnd = true;
 		}
+				
+	if(txt != null) {
+		param =txt.split(";");
+//		System.out.println("LINE_parms:"+param.length);
+		itemname="";
+		for (int i =0; i < param.length ; i++){
+			keyval = param[i].split("=");
+//			System.out.println("parm:"+keyval[0]);
+		    if (keyval[0].equals("sleep")) {
+			    	newTime =Integer.parseInt(keyval[1]);
+		    }
+		    if (keyval[0].equals("value")) {
+			    	Value =Float.parseFloat(keyval[1]);
+		    }
+		    if (keyval[0].equals("inc")) {
+			    	inc =Float.parseFloat(keyval[1]);
+		    }
+		    if (keyval[0].equals("QU")) {
+			    	qu =Integer.parseInt(keyval[1]);
+		    }
+		    if (keyval[0].equals("item")) {
+		    	Stream = keyval[1];
+//				System.out.println("KEYVal:"+keyval[1]); 	
+		    	keyval = Stream.split("/");
+		    	if (keyval.length==1) {  //item Name 
+		    		itemname = keyval[0];
+//					System.out.println("Isitemname:"); 	
+		    	} else {
+//					System.out.println("IsItemAdr:"); 	
+					iectype = IECMap.getType((Byte.parseByte(keyval[1])));
+			    	ASDU = Integer.parseInt(keyval[2]);
+			    	IOB = Integer.parseInt(keyval[3]);
+		    	}
+		    }
+		 }
+	   if (itemname.isEmpty()) {
+//		   System.out.println("Validate : Type "+iectype+" ASDU "+ASDU+" IOB "+IOB+ "  Val "+Value+"  QU "+qu+" Player SLEEP("+newTime+")"); 	
+		   return ((iectype != null)&&(ASDU != 0)&&(IOB !=0));
+	   } 
+//       System.out.println("Validate: itemname "+itemname); 	
+	   return true;
+	}
+return false;	
+ }
 
 		
-	    private void doline() {
-			String txt = "";
-			IECTCItem item =null;
-      try {
-				while (!isValidLine(txt)&&(PlayFileEnd == false)) {
+   private void doline() {
+		String txt = "";
+		IECTCItem item =null;
+		try {
+			while (!isValidLine(txt)&&(PlayFileEnd == false)) {
 					txt = br.readLine();
 //					System.out.println("LINE_"+lineNo+ ": "+txt);
-				}
-				if (PlayFileEnd == false) {
-					System.out.println("Player: Type "+iectype+" ASDU "+ASDU+" IOB "+IOB+"  inc "+inc+"  Val "+Value+"  QU "+qu+" Player SLEEP("+newTime+")"); 	
-					if (ieclist !=null) {
+					lineNo++;
+			}
+			if (PlayFileEnd == false) {
+				System.out.println("Player: Type "+iectype+" ASDU "+ASDU+" IOB "+IOB+"  inc "+inc+"  Val "+Value+"  QU "+qu+" Player SLEEP("+newTime+")"); 	
+				if (ieclist !=null) {
+					if (itemname.isEmpty()) {
 						item = ieclist.getIECStream(iectype, ASDU, IOB);
-						if (item !=null) {
-//							System.out.println("Type in LIST --> SIMULATE");
-							if (inc != 0) {
-								item.iob(0).setValue(item.iob(0).getValue()+inc);
+					} else {
+					    item = ieclist.getIECStream(itemname);
+					}
+					if (item !=null) {
+						System.out.println("Type in LIST --> SIMULATE");
+						if (inc != 0) {
+				    		if (item.iob(0).getValue()+inc > item.iob(0).getMAX_VALUE()) {
+								    item.iob(0).setValue(item.iob(0).getMIN_VALUE());
+				    		  } else {
+								    item.iob(0).setValue(item.iob(0).getValue()+inc);
+					    	  }
 							} else {
 								item.iob(0).setValue(Value);
 							}
@@ -143,8 +158,7 @@ public class IECSimPlayer {
 //							item.iob(0).s
 						}
 					}
-					} 
-
+    			}
 			} catch (IOException e) {
 				System.out.println(e);
 			}

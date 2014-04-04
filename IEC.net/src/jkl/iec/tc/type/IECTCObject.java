@@ -331,15 +331,18 @@ public class IECTCObject implements Cloneable {
 			break;
 		}
 		case M_ME_NA: case M_ME_TB : case M_ME_NB : case M_ME_TD :  {
-			int value=(int)Value;
-			buf[index]=(byte) (value % 256);
-			buf[index+1]=(byte) (value / 256);
+			short value=(short)Value;
+//			System.out.println("M_ValueParam "+ value);
+			buf[index+1]= (byte) (value  >> 8);
+			buf[index]= (byte)  value ;
+//			buf[index]=(byte) (value % 256);
+//			buf[index+1]=(byte) (value / 256);
 			break;
 		}
 		case C_SE_NA: case C_SE_NB :  {
-			int value=(int)Value;
-			buf[index]=(byte) (value % 256);
-			buf[index+1]=(byte) (value / 256);
+			short value=(short)Value;
+			buf[index+1]= (byte) (value  >> 8);
+			buf[index]= (byte)  value ;
 			break;
 		}
 		case M_ME_NC: case M_ME_TF : {

@@ -144,6 +144,7 @@ public class Server extends JFrame {
 		    	  fis = new FileInputStream( f );
 			      ObjectInputStream o = new ObjectInputStream( fis );
 				  result =(Properties) o.readObject();
+				  o.close();
 				}
 				catch ( IOException e ) { System.err.println( e ); }
 				catch ( ClassNotFoundException e ) { System.err.println( e ); }

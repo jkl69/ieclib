@@ -199,7 +199,7 @@ public class IECSimDlg extends JDialog {
 		});
 		
 //		timeField.setInputVerifier(verifier);
-		timeField.setBounds(148, 37, 86, 20);
+		timeField.setBounds(148, 37, 109, 20);
 		M_Type_panel.add(timeField);
 		timeField.setColumns(10);
 		
@@ -227,7 +227,7 @@ public class IECSimDlg extends JDialog {
 			}
 		});
 
-		ValueField.setBounds(148, 96, 86, 20);
+		ValueField.setBounds(148, 96, 109, 20);
 		M_Type_panel.add(ValueField);
 		ValueField.setColumns(10);
 		

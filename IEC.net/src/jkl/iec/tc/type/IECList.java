@@ -252,6 +252,16 @@ public class IECList extends ArrayList<IECTCItem> {
     	 return null;
      }
      
+     public IECTCItem getIECStream(String name) {
+    	 log.fine("Search Item Name "+name);
+       	 for (int it=0;it<size();it++) {
+        		 if (get(it).Name.equals(name)) {
+        			 return get(it);
+        		 }
+    	 }
+    	 return null;
+     }
+     
      public boolean containsITem(IECTCItem i){
     	 return (getIECStream(i.getType(),i.getASDU(),i.iob(0).getIOB()) != null);
      }

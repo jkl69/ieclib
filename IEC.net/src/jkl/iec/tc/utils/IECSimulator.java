@@ -1,11 +1,6 @@
 package jkl.iec.tc.utils;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
@@ -25,6 +20,7 @@ public class IECSimulator extends ArrayList<IECTCItem>{
 	class irq extends TimerTask {
 	    public void run() {
 	    	if (enabled) {
+	    		IECList.log.finest("SIMULATOR_IRQ");
 //			    System.out.println("IRQ");	
 			    for (int it=0;it<size();it++) {
 			    	simprop = (IECSimProperties) get(it).data;
