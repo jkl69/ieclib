@@ -46,7 +46,6 @@ import java.net.URL;
 public class Server extends JFrame {
 	
 	public final static Logger log = Logger.getLogger(Server.class .getName()); 
-	
 	private static String VersionFile = "/iec/net/applications/Images/version.ser"; 
 	
 	private Properties VERSION;
@@ -226,7 +225,7 @@ public Server()  {
 
 	getContentPane().add(splitPane, BorderLayout.CENTER);
 	splitPane.setOneTouchExpandable(true);
-	splitPane.setDividerLocation(200);
+	splitPane.setDividerLocation(180);
 			
 //	BP = new ButtonPanel(ServerAction,tf.data);
 	BP = new ButtonPanel(ServerAction,IECdata);

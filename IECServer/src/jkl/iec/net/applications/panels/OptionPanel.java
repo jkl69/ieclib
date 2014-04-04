@@ -15,6 +15,14 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
+import javax.swing.JTextPane;
+import javax.swing.JScrollPane;
+import java.awt.event.MouseWheelListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.Rectangle;
+import javax.swing.JTextArea;
+import java.awt.Dimension;
+import java.io.StringReader;
 
 @SuppressWarnings("serial")
 public class OptionPanel extends JPanel {
@@ -47,15 +55,18 @@ public class OptionPanel extends JPanel {
 	private IECList ieclist;
 	private final JPanel panel = new JPanel();
 	private final JButton btnLoadSimFile = new JButton("LoadSimFile");
+	private final JButton btnPlaySim = new JButton("Start File");
 	private final JButton btnNewButton = new JButton("t");
+	private final JScrollPane scrollPane;// = new JScrollPane();
+	private final JTextArea playtext = new JTextArea();
+	private final JButton btnStartSimul = new JButton("Start Simul");
 //	private final JPanel panel_1 = new JPanel();
 	
 	public void setList(IECList ieclist){
 		this.ieclist=ieclist;
 	}
+	
 	public OptionPanel() {
-
-		
 		IEC_small.addActionListener(oa);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(IEC_small);
@@ -67,6 +78,7 @@ public class OptionPanel extends JPanel {
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		
 		add(panel);
+		btnLoadSimFile.setSize(new Dimension(200, 100));
 		btnLoadSimFile.addActionListener(new ActionListener() {
 			JFileChooser fc = new JFileChooser();
 			public void actionPerformed(ActionEvent arg0) {
@@ -82,14 +94,30 @@ public class OptionPanel extends JPanel {
 		SimfileName = new JTextField();
 		panel.add(SimfileName);
 //		SimfileName.setText("D:\\\\workspace\\\\IEC.net\\\\src\\\\iec\\\\tc\\\\utils\\\\sim.txt");
-		SimfileName.setColumns(33);
+		SimfileName.setColumns(20);
 		
-		JButton btnPlaySim = new JButton("Start Simulation");
 		panel.add(btnPlaySim);
+		playtext.setText("item=item0;inc=1;sleep=5000\nitem=item1;inc=1");
+		scrollPane = new JScrollPane(playtext);
+		scrollPane.setBounds(new Rectangle(0, 0, 200, 0));
 		
+		panel.add(scrollPane);
+		playtext.setColumns(20);
+		playtext.setRows(4);
+		playtext.setBounds(new Rectangle(0, 0, 100, 100));
+		btnStartSimul.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IECSimPlayer player = new IECSimPlayer();
+				player.setIeclist(ieclist);
+
+				StringReader sr = new StringReader(playtext.getText());
+				player.play(sr);
+			}
+		});
+		
+		panel.add(btnStartSimul);
 //		panel.add(btnNewButton);
 		
-//		add(panel_1);
 		btnPlaySim.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				IECSimPlayer player = new IECSimPlayer();

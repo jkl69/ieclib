@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 
 import jkl.iec.tc.type.IECMap;
 import jkl.iec.tc.type.IECTCItem;
+import javax.swing.JTextPane;
 
 @SuppressWarnings("serial")
 public class IECSimDlg extends JDialog {
@@ -77,6 +78,7 @@ public class IECSimDlg extends JDialog {
 	private final JLabel itemvalueLabel = new JLabel("set item Value");
 	private final JLabel itemErorrLabel = new JLabel(".");
 	private final JLabel itemvalueErorrLabel = new JLabel(".");
+	private final JTextPane CSimulText = new JTextPane();
 	
 	public IECSimDlg() {
 		setUndecorated(true);
@@ -102,12 +104,12 @@ public class IECSimDlg extends JDialog {
 		C_Type_panel.setLayout(null);
 		
 		contentPanel.add(C_Type_panel, "C_Type");
-		itemlabel.setBounds(10, 35, 101, 24);
+		itemlabel.setBounds(10, 12, 101, 24);
 		
 		C_Type_panel.add(itemlabel);
 		itemField.setToolTipText("/ASDU/TK/IOB");
 		itemField.setColumns(10);
-		itemField.setBounds(148, 37, 86, 20);
+		itemField.setBounds(148, 15, 86, 20);
 		
 		C_Type_panel.add(itemField);
 		itemField.getDocument().addDocumentListener(new DocumentListener(){
@@ -135,7 +137,7 @@ public class IECSimDlg extends JDialog {
 		});
 		itemvalueField.setToolTipText("Value Increment or  0 (set equal) ");
 		itemvalueField.setColumns(10);
-		itemvalueField.setBounds(148, 96, 86, 20);
+		itemvalueField.setBounds(148, 47, 86, 20);
 		
 		C_Type_panel.add(itemvalueField);
 		itemvalueField.getDocument().addDocumentListener(new DocumentListener(){
@@ -161,7 +163,7 @@ public class IECSimDlg extends JDialog {
 				}
 			}
 		});
-		itemvalueLabel.setBounds(10, 99, 109, 17);
+		itemvalueLabel.setBounds(10, 48, 109, 17);
 		
 		C_Type_panel.add(itemvalueLabel);
 		itemErorrLabel.setForeground(Color.RED);
@@ -172,6 +174,10 @@ public class IECSimDlg extends JDialog {
 		itemvalueErorrLabel.setBounds(10, 127, 259, 14);
 		
 		C_Type_panel.add(itemvalueErorrLabel);
+		CSimulText.setText("test1\ntest2\ntest3");
+		CSimulText.setBounds(30, 79, 239, 76);
+		
+		C_Type_panel.add(CSimulText);
 		M_Type_panel.setLayout(null);
 		timeLabel.setBounds(10, 35, 101, 24);
 		M_Type_panel.add(timeLabel);

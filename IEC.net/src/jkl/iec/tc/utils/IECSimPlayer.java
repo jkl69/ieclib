@@ -5,8 +5,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 import jkl.iec.tc.type.IECList;
 import jkl.iec.tc.type.IECMap;
@@ -15,6 +17,8 @@ import jkl.iec.tc.type.IECMap.IECType;
 
 public class IECSimPlayer {
 	
+	public final static Logger log = Logger.getLogger(IECSimPlayer.class.getName()); 
+
 	private Timer timer = null;
 	private BufferedReader br;
 	private FileReader fr ;
@@ -48,9 +52,10 @@ public class IECSimPlayer {
 			} 
 //			System.out.println("LAST LINE -> EXIT");
 			try {
-				fr.close();
-				System.out.println("Player destroyed ");	
+				if (fr!=null) {fr.close();}
+				log.fine("Player destroyed ");	
 			} catch (IOException e) {
+				log.severe("Player destroy ERROR: "+e);	
 				System.out.println("Player destroy ERROR: "+e);	
 			} 
 	    	timer.cancel();
@@ -77,7 +82,7 @@ public class IECSimPlayer {
 			
 //	System.out.println("ValidateLine_"+txt);
 	if (txt == null) {
-		System.out.println("PLAYFile EOF:");
+		log.info("PLAYER EOF:");
     	PlayFileEnd = true;
 		}
 				
@@ -87,7 +92,7 @@ public class IECSimPlayer {
 		itemname="";
 		for (int i =0; i < param.length ; i++){
 			keyval = param[i].split("=");
-//			System.out.println("parm:"+keyval[0]);
+			log.finer("Found_param:"+keyval[0]);
 		    if (keyval[0].equals("sleep")) {
 			    	newTime =Integer.parseInt(keyval[1]);
 		    }
@@ -132,15 +137,17 @@ return false;
 		try {
 			while (!isValidLine(txt)&&(PlayFileEnd == false)) {
 					txt = br.readLine();
-//					System.out.println("LINE_"+lineNo+ ": "+txt);
+					log.fine("LINE_"+lineNo+ ": "+txt);
 					lineNo++;
 			}
 			if (PlayFileEnd == false) {
-				System.out.println("Player: Type "+iectype+" ASDU "+ASDU+" IOB "+IOB+"  inc "+inc+"  Val "+Value+"  QU "+qu+" Player SLEEP("+newTime+")"); 	
 				if (ieclist !=null) {
 					if (itemname.isEmpty()) {
+						log.info("Player: Type="+iectype+" ASDU="+ASDU+" IOB="+IOB+"  inc="+inc+"  Val="+Value+"  QU="+qu+" SLEEP="+newTime); 	
+//						System.out.println("Player: Type="+iectype+" ASDU="+ASDU+" IOB="+IOB+"  inc="+inc+"  Val="+Value+"  QU="+qu+" SLEEP="+newTime); 	
 						item = ieclist.getIECStream(iectype, ASDU, IOB);
 					} else {
+						log.info("Player: Itemname="+itemname+"  inc="+inc+"  Val="+Value+"  QU="+qu+" SLEEP="+newTime); 	
 					    item = ieclist.getIECStream(itemname);
 					}
 					if (item !=null) {
@@ -177,6 +184,15 @@ return false;
 			System.out.println("Player Not Create : ERROR "+e);
 			return  false;
 		}
+  }
+
+  public boolean play(StringReader sr){
+		fr=null;
+		this.br = new BufferedReader(sr);
+//		System.out.println("Player Create ");
+		timer = new Timer();
+		timer.schedule(new player(), 10);
+		return  true;
   }
 
 	public IECList getIeclist() {
