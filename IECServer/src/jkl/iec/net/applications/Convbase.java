@@ -137,9 +137,9 @@ public class Convbase {
 		}
 		if (getIndex("IntegratedTotalType") !=-1) {
 			t = entrys[getIndex("IntegratedTotalType")];
-			if (t.equals("DBF")) return "15";
+			if (t.equals("ZW")) return "15";
 		}
-		return "11"; //IntegratedTotalType
+		return "15"; //IntegratedTotalType
 	}
 	
 	private IECServerProperties setIECData(String[] entrys) {
@@ -148,9 +148,10 @@ public class Convbase {
 		iecprop.type = getType(entrys);
 		iecprop.ASDU = getAsdu(entrys);
 		iecprop.IOB = getIob(entrys);
-//		 System.out.println("IOB:"+iecprop.IOB);
-	    iecprop.Min = getMin(entrys);
-		iecprop.Max = getMax(entrys);
+//	    System.out.println("***iecprop.type:"+iecprop.type);
+
+//	    iecprop.Min = getMin(entrys);
+//		iecprop.Max = getMax(entrys);
 		return iecprop;
 	}
 	
@@ -208,7 +209,8 @@ public class Convbase {
        try {
 //   		System.out.println(HEADER);
 //      		p.setProperty("ITEM.PROPERTIES","NAME;TYPE;ASDU;COT;IOB;MIN;MAX");
-       		p.setProperty("ITEM.PROPERTIES","NAME;TYPE;ASDU;IOB;MIN;MAX");
+//  		p.setProperty("ITEM.PROPERTIES","NAME;TYPE;ASDU;IOB;MIN;MAX");
+  		p.setProperty("ITEM.PROPERTIES","NAME;TYPE;ASDU;IOB");
 		while((line = br.readLine()) != null) {
 			parseLine(line);
 		    LineNo ++;

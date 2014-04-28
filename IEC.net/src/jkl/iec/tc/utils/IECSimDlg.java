@@ -107,7 +107,7 @@ public class IECSimDlg extends JDialog {
 		C_Type_panel.add(itemlabel);
 		itemField.setToolTipText("/ASDU/TK/IOB");
 		itemField.setColumns(10);
-		itemField.setBounds(148, 37, 86, 20);
+		itemField.setBounds(148, 37, 121, 20);
 		
 		C_Type_panel.add(itemField);
 		itemField.getDocument().addDocumentListener(new DocumentListener(){
@@ -135,7 +135,7 @@ public class IECSimDlg extends JDialog {
 		});
 		itemvalueField.setToolTipText("Value Increment or  0 (set equal) ");
 		itemvalueField.setColumns(10);
-		itemvalueField.setBounds(148, 96, 86, 20);
+		itemvalueField.setBounds(148, 96, 121, 20);
 		
 		C_Type_panel.add(itemvalueField);
 		itemvalueField.getDocument().addDocumentListener(new DocumentListener(){

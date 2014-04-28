@@ -193,6 +193,7 @@ public class IECTCItem {
 		Stream[0] = t.tk();	
 		
 		for (int it=0;it<IOB.size();it++) {
+//			System.out.println("//Reset The Limits:");
 			IOB.get(it).setDefLimits();   //Reset The Limits
 			IOB.get(it).setQU((byte) 0);  //Reset The Quality
 		}
@@ -383,6 +384,7 @@ public class IECTCItem {
 			iob(0).setValue(Double.parseDouble(p.getProperty(pre+"VALUE",String.valueOf(iob(0).getValue()))));
 			iob(0).setMIN_VALUE(Double.parseDouble(p.getProperty(pre+"MIN",String.valueOf(iob(0).getMIN_VALUE()))));
 			iob(0).setMAX_VALUE(Double.parseDouble(p.getProperty(pre+"MAX",String.valueOf(iob(0).getMAX_VALUE()))));
+			System.out.println("SET ITEM LIMITS:"+iob(0).getMIN_VALUE()+":"+iob(0).getMAX_VALUE());
 			flag1 = Boolean.parseBoolean(p.getProperty(pre+"SIMULATE",String.valueOf(flag1)));
 		} catch (Exception e) {
 		}

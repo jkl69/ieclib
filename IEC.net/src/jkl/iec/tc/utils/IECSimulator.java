@@ -79,35 +79,6 @@ public class IECSimulator extends ArrayList<IECTCItem>{
 			    }
 			    item.iob(0).Time_RX = item.iob(0).getTime();
 
-/*
-					FileReader fileReader = null;
-				}
-				try {
-					backfile =simprop.getBackString();
-					String bf = backfile.substring(1, backfile.length());
-//					System.out.println("backfile:"+backfile.substring(1, backfile.length()));
-					System.out.println("backfile:"+bf);
-					fileReader = new FileReader(new File(bf));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				    item.iob(0).Time_RX = item.iob(0).getTime();
-					return;
-				}
-    	    	 BufferedReader br = new BufferedReader(fileReader);
-    	    	 String line = null;
-    	    	 try {
-					while ((line = br.readLine()) != null) {
-    			    	System.out.println("**** C_SIM ****"+line);
-    			    	simprop.setBackString(line,true);
-    		   	    	sim_C_item_checkback(item);
-	        	    }
-				} catch (IOException e) {
-					e.printStackTrace();
-				    item.iob(0).Time_RX = item.iob(0).getTime();
-					return;
-				}
-    	     simprop.setBackString(backfile,false);
-*/
     	    } 
    	    	else   	sim_C_item_checkback(item);
    	  	}
