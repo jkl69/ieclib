@@ -212,5 +212,9 @@ public class IECClient extends Thread {
 		}
 		return false;
 	}
+    
+	public IECSocket getIecsock() {
+		return iecsock;
+	}
 }
 
